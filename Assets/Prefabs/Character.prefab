@@ -141,6 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitPoints: 5
+  maxHp: 5
 --- !u!114 &3926786964091724598
 MonoBehaviour:
   m_ObjectHideFlags: 0

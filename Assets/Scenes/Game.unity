@@ -274,6 +274,7 @@ GameObject:
   m_Component:
   - component: {fileID: 363245576}
   - component: {fileID: 363245577}
+  - component: {fileID: 363245578}
   m_Layer: 0
   m_Name: BulletSystem
   m_TagString: Untagged
@@ -309,11 +310,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37bd15923a144ffbab0333dc6e74e641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelBounds: {fileID: 2572952653776768186}
+  bulletPool: {fileID: 363245578}
+--- !u!114 &363245578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363245575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe4bfa2be864a8a960de3a8bb4a9ee1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   initialCount: 50
   container: {fileID: 1831741369}
   prefab: {fileID: 201757604187811891, guid: 5fe72886874b4e445b06cf777ca4920d, type: 3}
   worldTransform: {fileID: 1683128698}
-  levelBounds: {fileID: 2572952653776768186}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
