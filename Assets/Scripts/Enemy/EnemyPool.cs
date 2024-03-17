@@ -22,11 +22,14 @@ namespace ShootEmUp
         [SerializeField]
         private GameObject prefab;
 
+        [SerializeField] 
+        private int maxEnemySpawned = 7;
+
         private readonly Queue<GameObject> enemyPool = new();
         
         private void Awake()
         {
-            for (var i = 0; i < 7; i++)
+            for (var i = 0; i < maxEnemySpawned; i++)
             {
                 var enemy = Instantiate(this.prefab, this.container);
                 this.enemyPool.Enqueue(enemy);
