@@ -1,14 +1,15 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ShootEmUp
 {
     public sealed class EnemyMoveAgent : MonoBehaviour
     {
         public event Action OnDestinationReached;
-
+        
         [SerializeField] 
-        private MoveComponent moveComponent;
+        private MoveComponentBase moveComponent;
 
         [SerializeField]
         private float moveThreshold = 0.25f;
@@ -33,12 +34,13 @@ namespace ShootEmUp
             if (vector.sqrMagnitude <= moveThreshold * moveThreshold)
             {
                 isReached = true;
+                moveComponent.SetDirection(Vector2.zero);
                 OnDestinationReached?.Invoke();
                 return;
             }
 
-            var direction = vector.normalized * Time.fixedDeltaTime;
-            moveComponent.MoveByRigidbodyVelocity(direction);
+            var direction = vector.normalized;
+            moveComponent.SetDirection(direction);
         }
     }
 }

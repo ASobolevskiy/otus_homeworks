@@ -29,9 +29,9 @@ namespace ShootEmUp
 
         private void FixedUpdate()
         {
-            if (character.TryGetComponent(out MoveComponent moveComponent))
+            if (character.TryGetComponent(out MoveComponentBase moveComponent))
             {
-                moveComponent.MoveByRigidbodyVelocity(direction * Time.fixedDeltaTime);
+                moveComponent.SetDirection(direction);
             }
         }
     }
