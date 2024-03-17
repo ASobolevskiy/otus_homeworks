@@ -5,10 +5,13 @@ namespace ShootEmUp
 {
     public sealed class HitPointsComponent : MonoBehaviour
     {
-        public event Action<GameObject> hpEmpty;
         public event Action<GameObject> OnHpEmpty;
         
-        [SerializeField] private int hitPoints;
+        [SerializeField] 
+        private int hitPoints;
+
+        [SerializeField]
+        private int maxHp = 3;
         
         public bool IsHitPointsExists() {
             return this.hitPoints > 0;
@@ -22,5 +25,7 @@ namespace ShootEmUp
                 this.OnHpEmpty?.Invoke(this.gameObject);
             }
         }
+
+        public void RestoreHpToMax() => hitPoints = maxHp;
     }
 }

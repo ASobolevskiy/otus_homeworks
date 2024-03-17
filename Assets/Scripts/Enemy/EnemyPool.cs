@@ -44,6 +44,11 @@ namespace ShootEmUp
             }
 
             enemy.transform.SetParent(this.worldTransform);
+            if (enemy.TryGetComponent(out HitPointsComponent hpComponent))
+            {
+                if(!hpComponent.IsHitPointsExists())
+                    hpComponent.RestoreHpToMax();
+            }
 
             var spawnPosition = this.enemyPositions.RandomSpawnPosition();
             enemy.transform.position = spawnPosition.position;
