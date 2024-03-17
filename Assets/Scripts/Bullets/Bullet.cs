@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace ShootEmUp
 {
@@ -15,14 +14,14 @@ namespace ShootEmUp
         public int Damage;
         
         [SerializeField]
-        private new Rigidbody2D rigidBody2D;
+        private Rigidbody2D rigidBody2D;
 
         [SerializeField]
         private SpriteRenderer spriteRenderer;
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            this.OnCollisionEntered?.Invoke(this, collision);
+            OnCollisionEntered?.Invoke(this, collision);
             if (!collision.gameObject.TryGetComponent(out TeamComponent team))
             {
                 return;
@@ -41,22 +40,22 @@ namespace ShootEmUp
 
         public void SetVelocity(Vector2 velocity)
         {
-            this.rigidBody2D.velocity = velocity;
+            rigidBody2D.velocity = velocity;
         }
 
         public void SetPhysicsLayer(int physicsLayer)
         {
-            this.gameObject.layer = physicsLayer;
+            gameObject.layer = physicsLayer;
         }
 
         public void SetPosition(Vector3 position)
         {
-            this.transform.position = position;
+            transform.position = position;
         }
 
         public void SetColor(Color color)
         {
-            this.spriteRenderer.color = color;
+            spriteRenderer.color = color;
         }
     }
 }

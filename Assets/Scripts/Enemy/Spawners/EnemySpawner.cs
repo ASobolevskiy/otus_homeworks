@@ -55,13 +55,13 @@ namespace ShootEmUp
         
         private void SetSpawnPosition()
         {
-            var spawnPosition = this.enemyPositions.RandomSpawnPosition();
+            var spawnPosition = enemyPositions.RandomSpawnPosition();
             currentEnemy.transform.position = spawnPosition.position;
         }
         
         private void SetAttackPosition()
         {
-            var attackPosition = this.enemyPositions.RandomAttackPosition();
+            var attackPosition = enemyPositions.RandomAttackPosition();
             currentEnemy.GetComponent<EnemyMoveAgent>().SetDestination(attackPosition.position);
         }
     }

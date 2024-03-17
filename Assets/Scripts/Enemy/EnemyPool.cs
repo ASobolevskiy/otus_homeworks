@@ -18,8 +18,8 @@ namespace ShootEmUp
         {
             for (var i = 0; i < maxSpawnedEnemies; i++)
             {
-                var enemy = Instantiate(this.prefab, this.container);
-                this.enemyPool.Enqueue(enemy);
+                var enemy = Instantiate(prefab, container);
+                enemyPool.Enqueue(enemy);
             }
         }
 
@@ -30,8 +30,8 @@ namespace ShootEmUp
 
         public void EnqueueEnemy(GameObject enemy)
         {
-            enemy.transform.SetParent(this.container);
-            this.enemyPool.Enqueue(enemy);
+            enemy.transform.SetParent(container);
+            enemyPool.Enqueue(enemy);
         }
 
      

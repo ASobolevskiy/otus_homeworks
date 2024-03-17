@@ -14,15 +14,15 @@ namespace ShootEmUp
         private int maxHp = 3;
         
         public bool IsHitPointsExists() {
-            return this.hitPoints > 0;
+            return hitPoints > 0;
         }
 
         public void TakeDamage(int damage)
         {
-            this.hitPoints -= damage;
-            if (this.hitPoints <= 0)
+            hitPoints -= damage;
+            if (hitPoints <= 0)
             {
-                this.OnHpEmpty?.Invoke(this.gameObject);
+                OnHpEmpty?.Invoke(gameObject);
             }
         }
 

@@ -22,13 +22,13 @@ namespace ShootEmUp
             while (isGameRunning)
             {
                 yield return new WaitForSeconds(1);
-                var enemy = this.enemySpawner.SpawnEnemy();
+                var enemy = enemySpawner.SpawnEnemy();
                 if (enemy != null)
                 {
-                    if (this.activeEnemies.Add(enemy))
+                    if (activeEnemies.Add(enemy))
                     {
-                        enemy.GetComponent<HitPointsComponent>().OnHpEmpty += this.OnDestroyed;
-                        enemy.GetComponent<EnemyAttackAgent>().OnFire += this.OnFire;
+                        enemy.GetComponent<HitPointsComponent>().OnHpEmpty += OnDestroyed;
+                        enemy.GetComponent<EnemyAttackAgent>().OnFire += OnFire;
                     }    
                 }
             }
@@ -38,8 +38,8 @@ namespace ShootEmUp
         {
             if (activeEnemies.Remove(enemy))
             {
-                enemy.GetComponent<HitPointsComponent>().OnHpEmpty -= this.OnDestroyed;
-                enemy.GetComponent<EnemyAttackAgent>().OnFire -= this.OnFire;
+                enemy.GetComponent<HitPointsComponent>().OnHpEmpty -= OnDestroyed;
+                enemy.GetComponent<EnemyAttackAgent>().OnFire -= OnFire;
 
                 enemySpawner.RemoveDestroyedEnemy(enemy);
             }

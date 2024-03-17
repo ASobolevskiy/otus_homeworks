@@ -16,15 +16,15 @@ namespace ShootEmUp
         
         private void FixedUpdate()
         {
-            this.cache.Clear();
-            this.cache.AddRange(this.activeBullets);
+            cache.Clear();
+            cache.AddRange(activeBullets);
 
-            for (int i = 0, count = this.cache.Count; i < count; i++)
+            for (int i = 0, count = cache.Count; i < count; i++)
             {
-                var bullet = this.cache[i];
-                if (!this.levelBounds.InBounds(bullet.transform.position))
+                var bullet = cache[i];
+                if (!levelBounds.InBounds(bullet.transform.position))
                 {
-                    this.RemoveBullet(bullet);
+                    RemoveBullet(bullet);
                 }
             }
         }
@@ -40,9 +40,9 @@ namespace ShootEmUp
             bullet.IsPlayer = args.isPlayer;
             bullet.SetVelocity(args.velocity);
             
-            if (this.activeBullets.Add(bullet))
+            if (activeBullets.Add(bullet))
             {
-                bullet.OnCollisionEntered += this.OnBulletCollision;
+                bullet.OnCollisionEntered += OnBulletCollision;
             }
         }
         
@@ -55,7 +55,7 @@ namespace ShootEmUp
         {
             if (activeBullets.Remove(bullet))
             {
-                bullet.OnCollisionEntered -= this.OnBulletCollision;
+                bullet.OnCollisionEntered -= OnBulletCollision;
                 bulletPool.EnqueueBullet(bullet);
             }
         }
