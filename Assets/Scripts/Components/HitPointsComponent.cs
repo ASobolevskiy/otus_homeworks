@@ -13,7 +13,8 @@ namespace ShootEmUp
         [SerializeField]
         private int maxHp = 3;
         
-        public bool IsHitPointsExists() {
+        public bool IsHitPointsExists() 
+        {
             return hitPoints > 0;
         }
 

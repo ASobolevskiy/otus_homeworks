@@ -1,30 +1,24 @@
-using System;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class LevelBackground : MonoBehaviour
+    public sealed partial class LevelBackground : MonoBehaviour
     {
         private float startPositionY;
-
         private float endPositionY;
-
         private float movingSpeedY;
-
         private float positionX;
-
         private float positionZ;
-
         private Transform myTransform;
-
+        
         [SerializeField]
-        private Params m_params;
+        private Params parameters;
 
         private void Awake()
         {
-            startPositionY = m_params.m_startPositionY;
-            endPositionY = m_params.m_endPositionY;
-            movingSpeedY = m_params.m_movingSpeedY;
+            startPositionY = parameters.startPositionY;
+            endPositionY = parameters.endPositionY;
+            movingSpeedY = parameters.movingSpeedY;
             myTransform = transform;
             var position = myTransform.position;
             positionX = position.x;
@@ -47,19 +41,6 @@ namespace ShootEmUp
                 movingSpeedY * Time.fixedDeltaTime,
                 positionZ
             );
-        }
-
-        [Serializable]
-        public sealed class Params
-        {
-            [SerializeField]
-            public float m_startPositionY;
-
-            [SerializeField]
-            public float m_endPositionY;
-
-            [SerializeField]
-            public float m_movingSpeedY;
         }
     }
 }

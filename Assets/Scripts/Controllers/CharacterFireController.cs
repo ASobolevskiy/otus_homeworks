@@ -28,16 +28,18 @@ namespace ShootEmUp
 
         private void Fire()
         {
-            var weapon = character.GetComponent<WeaponComponent>();
-            bulletSystem.FlyBulletByArgs(new BulletSystem.Args
+            if (character.TryGetComponent(out WeaponComponent weapon))
             {
-                isPlayer = true,
-                physicsLayer = (int)bulletConfig.physicsLayer,
-                color = bulletConfig.color,
-                damage = bulletConfig.damage,
-                position = weapon.Position,
-                velocity = weapon.Rotation * Vector3.up * bulletConfig.speed
-            });
+                bulletSystem.FlyBulletByArgs(new BulletSystem.Args
+                {
+                    isPlayer = true,
+                    physicsLayer = (int)bulletConfig.physicsLayer,
+                    color = bulletConfig.color,
+                    damage = bulletConfig.damage,
+                    position = weapon.Position,
+                    velocity = weapon.Rotation * Vector3.up * bulletConfig.speed
+                });
+            }
         }
     }
 }

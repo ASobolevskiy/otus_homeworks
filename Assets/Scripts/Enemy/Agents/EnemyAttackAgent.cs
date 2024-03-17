@@ -10,7 +10,9 @@ namespace ShootEmUp
         [SerializeField]
         private float countdown;
 
+        //TODO Fix with DI
         private BulletSystem bulletSystem;
+        
         private GameObject target;
         private float currentTime;
         private bool readyForAttack;
@@ -64,7 +66,7 @@ namespace ShootEmUp
             bulletSystem.FlyBulletByArgs(new BulletSystem.Args
             {
                 isPlayer = false,
-                physicsLayer = (int)PhysicsLayer.ENEMY_BULLET,
+                physicsLayer = (int)PhysicsLayer.EnemyBullet,
                 color = Color.red,
                 damage = 1,
                 position = startPosition,
