@@ -7,10 +7,7 @@ namespace ShootEmUp
     public sealed class InputSystem : MonoBehaviour
     {
         public event Action OnFire;
-        public float HorizontalDirection { get; private set; }
-
-        [SerializeField]
-        private GameObject character;
+        public event Action<Vector2> OnMove;
 
         private void Update()
         {
@@ -18,24 +15,14 @@ namespace ShootEmUp
             {
                 OnFire?.Invoke();
             }
-
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                this.HorizontalDirection = -1;
-            }
-            else if (Input.GetKey(KeyCode.RightArrow))
-            {
-                this.HorizontalDirection = 1;
-            }
-            else
-            {
-                this.HorizontalDirection = 0;
-            }
+            OnMove?.Invoke(GetDirection());
         }
-        
-        private void FixedUpdate()
+
+        private Vector2 GetDirection()
         {
-            this.character.GetComponent<MoveComponent>().MoveByRigidbodyVelocity(new Vector2(this.HorizontalDirection, 0) * Time.fixedDeltaTime);
+            if (Input.GetKey(KeyCode.LeftArrow))
+                return Vector2.left;
+            return Input.GetKey(KeyCode.RightArrow) ? Vector2.right : Vector2.zero;
         }
     }
 }
