@@ -1,17 +1,18 @@
+using System;
 using UnityEngine;
 
 namespace ShootEmUp
 {
     public class EnemySpawner : MonoBehaviour
     {
+        public event Action<GameObject> OnEnemySpawned;
+        
         [SerializeField]
         private EnemyPositions enemyPositions;
 
         [SerializeField]
         private EnemyPool enemyPool;
-
-        [SerializeField]
-        private int maxSpawnedEnemies;
+        
 
         [SerializeField]
         private Transform worldTransform;
@@ -24,28 +25,21 @@ namespace ShootEmUp
 
         private GameObject currentEnemy;
 
-        private void Awake()
+        public void SpawnEnemy()
         {
-            enemyPool.FillEnemyQueue(maxSpawnedEnemies);
-        }
-
-        public GameObject SpawnEnemy()
-        {
-            currentEnemy = enemyPool.DequeueEnemy();
-            if (currentEnemy != null)
+            if(enemyPool.TryDequeueEnemy(out currentEnemy))
             {
                 currentEnemy.transform.SetParent(worldTransform);
                 RestoreHpIfNeeded();
                 SetSpawnPosition();
                 SetAttackPosition();
-                if (currentEnemy.TryGetComponent(out EnemyAttackAgent attackAgent))
+                if (currentEnemy.TryGetComponent(out EnemyAttackAgent enemyAttackAgent))
                 {
-                    attackAgent.SetTarget(character);
-                    attackAgent.SetBulletSystem(bulletSystem);
+                    enemyAttackAgent.SetTarget(character);
+                    enemyAttackAgent.SetBulletSystem(bulletSystem);
                 }
+                OnEnemySpawned?.Invoke(currentEnemy);
             }
-
-            return currentEnemy;
         }
         
         public void RemoveDestroyedEnemy(GameObject enemy)

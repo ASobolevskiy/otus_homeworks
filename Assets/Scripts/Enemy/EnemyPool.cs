@@ -11,29 +11,27 @@ namespace ShootEmUp
 
         [SerializeField]
         private GameObject prefab;
+        
+        [SerializeField]
+        public int maxEnemies = 7;
 
         private readonly Queue<GameObject> enemyPool = new();
         
-        public void FillEnemyQueue(int maxSpawnedEnemies)
+        private void Awake()
         {
-            for (var i = 0; i < maxSpawnedEnemies; i++)
+            for (var i = 0; i < maxEnemies; i++)
             {
                 var enemy = Instantiate(prefab, container);
                 enemyPool.Enqueue(enemy);
             }
         }
-
-        public GameObject DequeueEnemy()
-        {
-            return enemyPool.TryDequeue(out var enemy) ? enemy : null;
-        }
-
+        
+        public bool TryDequeueEnemy(out GameObject enemy) => enemyPool.TryDequeue(out enemy);
+        
         public void EnqueueEnemy(GameObject enemy)
         {
             enemy.transform.SetParent(container);
             enemyPool.Enqueue(enemy);
         }
-
-     
     }
 }
