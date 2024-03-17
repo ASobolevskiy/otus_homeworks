@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace ShootEmUp
 {
     public sealed class EnemyManager : MonoBehaviour
     {
         [SerializeField]
-        private EnemyPool enemyPool;
-
+        private EnemySpawner enemySpawner;
+        
         [SerializeField]
         private BulletSystem bulletSystem;
         
@@ -23,7 +22,7 @@ namespace ShootEmUp
             while (isGameRunning)
             {
                 yield return new WaitForSeconds(1);
-                var enemy = this.enemyPool.SpawnEnemy();
+                var enemy = this.enemySpawner.SpawnEnemy();
                 if (enemy != null)
                 {
                     if (this.activeEnemies.Add(enemy))
@@ -42,7 +41,7 @@ namespace ShootEmUp
                 enemy.GetComponent<HitPointsComponent>().OnHpEmpty -= this.OnDestroyed;
                 enemy.GetComponent<EnemyAttackAgent>().OnFire -= this.OnFire;
 
-                enemyPool.UnspawnEnemy(enemy);
+                enemySpawner.RemoveDestroyedEnemy(enemy);
             }
         }
 
