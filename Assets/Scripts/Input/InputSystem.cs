@@ -1,22 +1,22 @@
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ShootEmUp
 {
-    public sealed class InputManager : MonoBehaviour
+    public sealed class InputSystem : MonoBehaviour
     {
+        public event Action OnFire;
         public float HorizontalDirection { get; private set; }
 
         [SerializeField]
         private GameObject character;
 
-        [SerializeField]
-        private CharacterController characterController;
-
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                characterController._fireRequired = true;
+                OnFire?.Invoke();
             }
 
             if (Input.GetKey(KeyCode.LeftArrow))
