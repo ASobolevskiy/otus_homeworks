@@ -492,6 +492,7 @@ MonoBehaviour:
   maxSpawnedEnemies: 7
   worldTransform: {fileID: 1683128698}
   character: {fileID: 4414282821800802397}
+  bulletSystem: {fileID: 363245577}
 --- !u!1 &883274639
 GameObject:
   m_ObjectHideFlags: 0

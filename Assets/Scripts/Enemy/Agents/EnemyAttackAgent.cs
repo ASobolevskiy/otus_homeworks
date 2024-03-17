@@ -4,25 +4,31 @@ namespace ShootEmUp
 {
     public sealed class EnemyAttackAgent : MonoBehaviour
     {
-        public delegate void FireHandler(GameObject enemy, Vector2 position, Vector2 direction);
-
-        public event FireHandler OnFire;
-
         [SerializeField] 
         private WeaponComponent weaponComponent;
-        
-        [SerializeField] 
-        private EnemyMoveAgent moveAgent;
         
         [SerializeField]
         private float countdown;
 
+        private BulletSystem bulletSystem;
         private GameObject target;
         private float currentTime;
+        private bool readyForAttack;
 
         public void SetTarget(GameObject target)
         {
             this.target = target;
+        }
+
+        public void SetBulletSystem(BulletSystem bulletSystem)
+        {
+            if (this.bulletSystem == null)
+                this.bulletSystem = bulletSystem;
+        }
+
+        public void SetReadyForAttack(bool ready)
+        {
+            readyForAttack = ready;
         }
 
         public void Reset()
@@ -32,12 +38,12 @@ namespace ShootEmUp
 
         private void FixedUpdate()
         {
-            if (!moveAgent.IsReached)
+            if (!readyForAttack)
             {
                 return;
             }
-            
-            if (!target.GetComponent<HitPointsComponent>().IsHitPointsExists())
+
+            if (!target.TryGetComponent(out HitPointsComponent hpComponent) || !hpComponent.IsHitPointsExists())
             {
                 return;
             }
@@ -53,9 +59,17 @@ namespace ShootEmUp
         private void Fire()
         {
             var startPosition = weaponComponent.Position;
-            var vector = (Vector2) target.transform.position - startPosition;
+            var vector = (Vector2)target.transform.position - startPosition;
             var direction = vector.normalized;
-            OnFire?.Invoke(gameObject, startPosition, direction);
+            bulletSystem.FlyBulletByArgs(new BulletSystem.Args
+            {
+                isPlayer = false,
+                physicsLayer = (int)PhysicsLayer.ENEMY_BULLET,
+                color = Color.red,
+                damage = 1,
+                position = startPosition,
+                velocity = direction * 2.0f
+            });
         }
     }
 }

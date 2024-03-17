@@ -19,6 +19,9 @@ namespace ShootEmUp
         [SerializeField]
         private GameObject character;
 
+        [SerializeField]
+        private BulletSystem bulletSystem;
+
         private GameObject currentEnemy;
 
         private void Awake()
@@ -38,13 +41,21 @@ namespace ShootEmUp
                 if (currentEnemy.TryGetComponent(out EnemyAttackAgent attackAgent))
                 {
                     attackAgent.SetTarget(character);
+                    attackAgent.SetBulletSystem(bulletSystem);
                 }
             }
 
             return currentEnemy;
         }
         
-        public void RemoveDestroyedEnemy(GameObject enemy) => enemyPool.EnqueueEnemy(enemy);
+        public void RemoveDestroyedEnemy(GameObject enemy)
+        {
+            if (enemy.TryGetComponent(out EnemyAttackAgent attackAgent))
+            {
+                attackAgent.SetReadyForAttack(false);
+            }
+            enemyPool.EnqueueEnemy(enemy);
+        }
 
         private void RestoreHpIfNeeded()
         {
