@@ -2,7 +2,9 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class CharacterFireController : MonoBehaviour
+    public class CharacterFireController : MonoBehaviour,
+        Listeners.IGameStartListener,
+        Listeners.IGameFinishListener
     {
         [SerializeField]
         private InputSystem input;
@@ -16,12 +18,12 @@ namespace ShootEmUp
         [SerializeField]
         private GameObject character;
 
-        private void OnEnable()
+        public void OnGameStarted()
         {
             input.OnFire += Fire;
         }
 
-        private void OnDisable()
+        public void OnGameFinished()
         {
             input.OnFire -= Fire;
         }

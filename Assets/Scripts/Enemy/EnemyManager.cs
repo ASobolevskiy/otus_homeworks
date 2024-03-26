@@ -3,38 +3,40 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyManager : MonoBehaviour
+    public sealed class EnemyManager : MonoBehaviour,
+        Listeners.IGameStartListener,
+        Listeners.IGameFinishListener
     {
         [SerializeField]
         private EnemySpawner enemySpawner;
         
         private readonly HashSet<GameObject> activeEnemies = new();
 
-        private void Awake()
+        public void OnGameStarted()
         {
             enemySpawner.OnEnemySpawned += HandleSpawnedEnemy;
         }
-
-        private void OnDestroy()
+        
+        public void OnGameFinished()
         {
             enemySpawner.OnEnemySpawned -= HandleSpawnedEnemy;
         }
 
         private void HandleSpawnedEnemy(GameObject enemy)
         {
-            if (activeEnemies.Add(enemy))
-            {
-                enemy.GetComponent<HitPointsComponent>().OnHpEmpty += OnDestroyed;
-            }
+            if (!activeEnemies.Add(enemy)) 
+                return;
+            if(enemy.TryGetComponent(out HitPointsComponent hpComponent))
+                hpComponent.OnHpEmpty += OnDestroyed;
         }
 
         private void OnDestroyed(GameObject enemy)
         {
-            if (activeEnemies.Remove(enemy))
-            {
-                enemy.GetComponent<HitPointsComponent>().OnHpEmpty -= OnDestroyed;
-                enemySpawner.RemoveDestroyedEnemy(enemy);
-            }
+            if (!activeEnemies.Remove(enemy)) 
+                return;
+            if (enemy.TryGetComponent(out HitPointsComponent hpComponent))
+                hpComponent.OnHpEmpty -= OnDestroyed;
+            enemySpawner.RemoveDestroyedEnemy(enemy);
         }
     }
 }

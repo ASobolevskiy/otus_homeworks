@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyAttackAgent : MonoBehaviour
+    public sealed class EnemyAttackAgent : MonoBehaviour,
+        Listeners.IFixedUpdateListener
     {
         [SerializeField] 
         private WeaponComponent weaponComponent;
@@ -37,8 +38,8 @@ namespace ShootEmUp
         {
             currentTime = countdown;
         }
-
-        private void FixedUpdate()
+        
+        public void OnFixedUpdate(float fixedDeltaTime)
         {
             if (!readyForAttack)
             {
@@ -50,12 +51,17 @@ namespace ShootEmUp
                 return;
             }
 
-            currentTime -= Time.fixedDeltaTime;
+            currentTime -= fixedDeltaTime;
             if (currentTime <= 0)
             {
                 Fire();
                 currentTime += countdown;
             }
+        }
+
+        private void FixedUpdate()
+        {
+            
         }
 
         private void Fire()

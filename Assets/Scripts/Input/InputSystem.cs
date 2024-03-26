@@ -3,12 +3,13 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class InputSystem : MonoBehaviour
+    public sealed class InputSystem : MonoBehaviour,
+        Listeners.IUpdateListener
     {
         public event Action OnFire;
         public event Action<Vector2> OnMove;
 
-        private void Update()
+        public void OnUpdate(float deltaTime)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {

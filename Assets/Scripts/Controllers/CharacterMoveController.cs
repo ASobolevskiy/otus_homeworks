@@ -2,7 +2,9 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class CharacterMoveController : MonoBehaviour
+    public class CharacterMoveController : MonoBehaviour,
+        Listeners.IGameStartListener,
+        Listeners.IGameFinishListener
     {
         [SerializeField]
         private InputSystem input;
@@ -10,16 +12,16 @@ namespace ShootEmUp
         [SerializeField]
         private GameObject character;
 
-        private void OnEnable()
+        public void OnGameStarted()
         {
             input.OnMove += SetDirection;
         }
 
-        private void OnDisable()
+        public void OnGameFinished()
         {
             input.OnMove -= SetDirection;
         }
-        
+
         private void SetDirection(Vector2 direction)
         {
             if (character.TryGetComponent(out MoveComponentBase moveComponent))

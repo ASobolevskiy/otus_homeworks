@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class MoveByRigidBodyComponent : MoveComponentBase
+    public sealed class MoveByRigidBodyComponent : MoveComponentBase,
+        Listeners.IFixedUpdateListener
     {
         [SerializeField]
         private new Rigidbody2D rigidbody2D;
@@ -17,9 +18,9 @@ namespace ShootEmUp
             this.direction = direction;
         }
 
-        private void FixedUpdate()
+        public void OnFixedUpdate(float fixedDeltaTime)
         {
-            var nextPosition = rigidbody2D.position + (speed * Time.fixedDeltaTime * direction);
+            var nextPosition = rigidbody2D.position + (speed * fixedDeltaTime * direction);
             rigidbody2D.MovePosition(nextPosition);
         }
     }

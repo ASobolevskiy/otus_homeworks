@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed partial class BulletSystem : MonoBehaviour
+    public sealed partial class BulletSystem : MonoBehaviour,
+        Listeners.IFixedUpdateListener
     {
         [SerializeField] 
         private LevelBounds levelBounds;
@@ -14,7 +15,7 @@ namespace ShootEmUp
         private readonly HashSet<Bullet> activeBullets = new();
         private readonly List<Bullet> cache = new();
         
-        private void FixedUpdate()
+        public void OnFixedUpdate(float fixedDeltaTime)
         {
             cache.Clear();
             cache.AddRange(activeBullets);

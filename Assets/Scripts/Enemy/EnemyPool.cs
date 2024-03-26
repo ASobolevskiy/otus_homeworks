@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyPool : MonoBehaviour
+    public sealed class EnemyPool : MonoBehaviour,
+        Listeners.IGameStartListener
     {
         [Header("Pool")]
         [SerializeField]
@@ -17,7 +18,7 @@ namespace ShootEmUp
 
         private readonly Queue<GameObject> enemyPool = new();
         
-        private void Awake()
+        public void OnGameStarted()
         {
             for (var i = 0; i < maxEnemies; i++)
             {

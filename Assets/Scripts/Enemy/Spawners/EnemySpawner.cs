@@ -6,6 +6,9 @@ namespace ShootEmUp
     public class EnemySpawner : MonoBehaviour
     {
         public event Action<GameObject> OnEnemySpawned;
+
+        [SerializeField]
+        private GameManager gameManager;
         
         [SerializeField]
         private EnemyPositions enemyPositions;
@@ -37,6 +40,15 @@ namespace ShootEmUp
                 {
                     enemyAttackAgent.SetTarget(character);
                     enemyAttackAgent.SetBulletSystem(bulletSystem);
+                    gameManager.AddGameListener(enemyAttackAgent);
+                }
+                if(currentEnemy.TryGetComponent(out EnemyMoveAgent enemyMoveAgent))
+                {
+                    gameManager.AddGameListener(enemyMoveAgent);
+                }
+                if(currentEnemy.TryGetComponent(out MoveComponentBase moveComponent))
+                {
+                    gameManager.AddGameListener(moveComponent);
                 }
                 OnEnemySpawned?.Invoke(currentEnemy);
             }
@@ -47,6 +59,15 @@ namespace ShootEmUp
             if (enemy.TryGetComponent(out EnemyAttackAgent attackAgent))
             {
                 attackAgent.SetReadyForAttack(false);
+                gameManager.RemoveGameListener(attackAgent);
+            }
+            if (enemy.TryGetComponent(out EnemyMoveAgent enemyMoveAgent))
+            {
+                gameManager.RemoveGameListener(enemyMoveAgent);
+            }
+            if (enemy.TryGetComponent(out MoveComponentBase moveComponent))
+            {
+                gameManager.RemoveGameListener(moveComponent);
             }
             enemyPool.EnqueueEnemy(enemy);
         }
@@ -67,7 +88,11 @@ namespace ShootEmUp
         private void SetAttackPosition()
         {
             var attackPosition = enemyPositions.RandomAttackPosition();
-            currentEnemy.GetComponent<EnemyMoveAgent>().SetDestination(attackPosition.position);
+            if (currentEnemy.TryGetComponent(out EnemyMoveAgent moveAgent))
+            {
+                moveAgent.SetDestination(attackPosition.position);
+            }
+            
         }
     }
 }
