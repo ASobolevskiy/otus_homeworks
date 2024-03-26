@@ -6,12 +6,10 @@ namespace ShootEmUp
     public sealed class Bullet : MonoBehaviour
     {
         public event Action<Bullet, Collision2D> OnCollisionEntered;
-
-        [NonSerialized] 
-        public bool IsPlayer;
         
-        [NonSerialized] 
-        public int Damage;
+        public bool IsPlayer { get; set; } 
+        
+        public int Damage { get; set; }
         
         [SerializeField]
         private Rigidbody2D rigidBody2D;
