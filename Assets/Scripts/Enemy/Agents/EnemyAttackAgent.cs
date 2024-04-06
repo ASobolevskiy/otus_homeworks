@@ -5,6 +5,8 @@ namespace ShootEmUp
     public sealed class EnemyAttackAgent : MonoBehaviour,
         Listeners.IFixedUpdateListener
     {
+        private const float BULLET_SPEED = 2.0f;
+        
         [SerializeField] 
         private WeaponComponent weaponComponent;
         
@@ -59,11 +61,6 @@ namespace ShootEmUp
             }
         }
 
-        private void FixedUpdate()
-        {
-            
-        }
-
         private void Fire()
         {
             var startPosition = weaponComponent.Position;
@@ -76,7 +73,7 @@ namespace ShootEmUp
                 color = Color.red,
                 damage = 1,
                 position = startPosition,
-                velocity = direction * 2.0f
+                velocity = direction * BULLET_SPEED
             });
         }
     }

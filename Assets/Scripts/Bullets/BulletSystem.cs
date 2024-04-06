@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ShootEmUp
 {
     public sealed partial class BulletSystem : MonoBehaviour,
-        Listeners.IFixedUpdateListener
+        Listeners.IFixedUpdateListener,
+        Listeners.IGamePauseListener,
+        Listeners.IGameResumeListener
     {
         [SerializeField] 
         private LevelBounds levelBounds;
@@ -14,7 +17,23 @@ namespace ShootEmUp
         
         private readonly HashSet<Bullet> activeBullets = new();
         private readonly List<Bullet> cache = new();
-        
+
+        public void OnGamePaused()
+        {
+            foreach (var bullet in activeBullets)
+            {
+                bullet.StopFlying();
+            }
+        }
+
+        public void OnGameResumed()
+        {
+            foreach (var bullet in activeBullets)
+            {
+                bullet.ContinueFlying();
+            }
+        }
+
         public void OnFixedUpdate(float fixedDeltaTime)
         {
             cache.Clear();

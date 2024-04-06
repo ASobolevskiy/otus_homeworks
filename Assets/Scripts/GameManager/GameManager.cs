@@ -10,133 +10,127 @@ namespace ShootEmUp
         
         public GameState GameState { get; private set; } = GameState.None;
 
-        private List<Listeners.IGameListener> gameListeners = new();
-        
-        private List<Listeners.IGameStartListener> gameStartListeners = new();
-        private List<Listeners.IGamePauseListener> gamePauseListeners = new();
-        private List<Listeners.IGameResumeListener> gameResumeListeners = new();
-        private List<Listeners.IGameFinishListener> gameFinishListeners = new();
-        private List<Listeners.IUpdateListener> gameUpdateListeners = new();
-        private List<Listeners.IFixedUpdateListener> gameFixedUpdateListeners = new();
+        private readonly List<Listeners.IGameListener> gameListeners = new();
         
         public void AddGameListeners(IEnumerable<Listeners.IGameListener> listeners)
         {
-            foreach (var t in listeners)
+            foreach (var listener in listeners)
             {
-                AddGameListener(t);
+                AddGameListener(listener);
             }
         }
 
         public void AddGameListener(Listeners.IGameListener listener)
         {
             gameListeners.Add(listener);
-            if (listener is Listeners.IGameStartListener gameStartListener)
-                gameStartListeners.Add(gameStartListener);
-            if (listener is Listeners.IGamePauseListener gamePauseListener)
-                gamePauseListeners.Add(gamePauseListener);
-            if (listener is Listeners.IGameResumeListener gameResumeListener)
-                gameResumeListeners.Add(gameResumeListener);
-            if (listener is Listeners.IGameFinishListener gameFinishListener)
-                gameFinishListeners.Add(gameFinishListener);
-            if (listener is Listeners.IUpdateListener gameUpdateListener)
-                gameUpdateListeners.Add(gameUpdateListener);
-            if (listener is Listeners.IFixedUpdateListener gameFixedUpdateListener) gameFixedUpdateListeners.Add(gameFixedUpdateListener);
         }
 
         public void RemoveGameListener(Listeners.IGameListener listener)
         {
             gameListeners.Remove(listener);
-            if (listener is Listeners.IGameStartListener gameStartListener)
-                gameStartListeners.Remove(gameStartListener);
-            if (listener is Listeners.IGamePauseListener gamePauseListener)
-                gamePauseListeners.Remove(gamePauseListener);
-            if (listener is Listeners.IGameResumeListener gameResumeListener)
-                gameResumeListeners.Remove(gameResumeListener);
-            if (listener is Listeners.IGameFinishListener gameFinishListener)
-                gameFinishListeners.Remove(gameFinishListener);
-            if (listener is Listeners.IUpdateListener gameUpdateListener)
-                gameUpdateListeners.Remove(gameUpdateListener);
-            if (listener is Listeners.IFixedUpdateListener gameFixedUpdateListener) gameFixedUpdateListeners.Remove(gameFixedUpdateListener);
         }
         
         public void HandleStart()
         {
-            if(GameState == GameState.None)
+            if (GameState != GameState.None)
             {
-                Debug.Log("Game started!");
-                GameState = GameState.Playing;
-                Time.timeScale = 1;
-                gameStartListeners.ForEach(l => l.OnGameStarted());
+                return;
             }
-            else
+
+            GameState = GameState.Playing;
+            
+            foreach (var listener in gameListeners)
             {
-                Debug.Log("Game is already running!");
+                if(listener is Listeners.IGameStartListener gameStartListener)
+                {
+                    gameStartListener.OnGameStarted();
+                }
             }
         }
 
         public void HandlePause()
         {
-            if(GameState == GameState.Playing)
+            if (GameState != GameState.Playing)
             {
-                Debug.Log("Game paused!");
-                GameState = GameState.Paused;
-                Time.timeScale = 0;
-                gamePauseListeners.ForEach(l => l.OnGamePaused());
+                return;
             }
-            else
+
+            GameState = GameState.Paused;
+
+            foreach (var listener in gameListeners)
             {
-                Debug.Log("Cannot pause not running game!");
+                if (listener is Listeners.IGamePauseListener gamePauseListener)
+                {
+                    gamePauseListener.OnGamePaused();
+                }
             }
-            
         }
 
         public void HandleResume()
         {
-            if(GameState == GameState.Paused)
+            if (GameState != GameState.Paused)
             {
-                Debug.Log("Game resumed!");
-                GameState = GameState.Playing;
-                Time.timeScale = 1;
-                gameResumeListeners.ForEach(l => l.OnGameResumed());
+                return;
             }
-            else
+
+            GameState = GameState.Playing;
+            
+            foreach (var listener in gameListeners)
             {
-                Debug.Log("Cannot resume: game is not paused!");
+                if (listener is Listeners.IGameResumeListener gameResumeListener)
+                {
+                    gameResumeListener.OnGameResumed();
+                }
             }
         }
 
         public void HandleFinish()
         {
-            if(GameState != GameState.None && GameState != GameState.Finished)
+            if (GameState is GameState.None or GameState.Finished)
             {
-                Debug.Log("Game finished!");
-                GameState = GameState.Finished;
-                Time.timeScale = 0;
-                gameFinishListeners.ForEach(l => l.OnGameFinished());
-                GameFinished?.Invoke();
+                return;
             }
-            else
+
+            foreach (var listener in gameListeners)
             {
-                Debug.Log("Game is not started yet!");
+                if (listener is Listeners.IGameFinishListener gameFinishListener)
+                {
+                    gameFinishListener.OnGameFinished();
+                }
             }
+            
+            GameFinished?.Invoke();
         }
 
         private void Update()
         {
-            if (GameState != GameState.Playing) 
-                return;
-            for (int i = 0; i < gameUpdateListeners.Count; i++)
+            if (GameState != GameState.Playing)
             {
-                gameUpdateListeners[i].OnUpdate(Time.deltaTime);
+                return;
+            }
+
+            foreach (var listener in gameListeners)
+            {
+                if (listener is Listeners.IUpdateListener updateListener)
+                {
+                    updateListener.OnUpdate(Time.deltaTime);
+                }
             }
         }
 
         private void FixedUpdate()
         {
-            if (GameState != GameState.Playing) return;
-            for (int i = 0; i < gameFixedUpdateListeners.Count; i++)
+            if (GameState != GameState.Playing)
             {
-                gameFixedUpdateListeners[i].OnFixedUpdate(Time.fixedDeltaTime);
+                return;
+            }
+
+            foreach (var listener in gameListeners)
+            {
+                if (listener is Listeners.IFixedUpdateListener fixedUpdateListener)
+                {
+                    fixedUpdateListener.OnFixedUpdate(Time.fixedDeltaTime);
+                }
             }
         }
     }

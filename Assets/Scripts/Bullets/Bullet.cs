@@ -17,6 +17,8 @@ namespace ShootEmUp
         [SerializeField]
         private SpriteRenderer spriteRenderer;
 
+        private Vector2 oldVelocity;
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
             OnCollisionEntered?.Invoke(this, collision);
@@ -54,6 +56,17 @@ namespace ShootEmUp
         public void SetColor(Color color)
         {
             spriteRenderer.color = color;
+        }
+
+        public void StopFlying()
+        {
+            oldVelocity = rigidBody2D.velocity;
+            rigidBody2D.velocity = Vector2.zero;
+        }
+
+        public void ContinueFlying()
+        {
+            rigidBody2D.velocity = oldVelocity;
         }
     }
 }
