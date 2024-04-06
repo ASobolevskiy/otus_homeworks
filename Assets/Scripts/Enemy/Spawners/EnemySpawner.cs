@@ -74,9 +74,15 @@ namespace ShootEmUp
 
         private void RestoreHpIfNeeded()
         {
-            if (!currentEnemy.TryGetComponent(out HitPointsComponent hpComponent)) return;
+            if (!currentEnemy.TryGetComponent(out HitPointsComponent hpComponent))
+            {
+                return;
+            }
+
             if(!hpComponent.IsHitPointsExists())
+            {
                 hpComponent.RestoreHpToMax();
+            }
         }
         
         private void SetSpawnPosition()

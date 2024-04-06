@@ -21,7 +21,10 @@ namespace ShootEmUp
         private Vector2 GetDirection()
         {
             if (Input.GetKey(KeyCode.LeftArrow))
+            {
                 return Vector2.left;
+            }
+
             return Input.GetKey(KeyCode.RightArrow) ? Vector2.right : Vector2.zero;
         }
     }

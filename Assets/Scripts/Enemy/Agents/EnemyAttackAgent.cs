@@ -28,7 +28,9 @@ namespace ShootEmUp
         public void SetBulletSystem(BulletSystem bulletSystem)
         {
             if (this.bulletSystem == null)
+            {
                 this.bulletSystem = bulletSystem;
+            }
         }
 
         public void SetReadyForAttack(bool ready)

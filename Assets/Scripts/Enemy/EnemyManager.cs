@@ -24,18 +24,29 @@ namespace ShootEmUp
 
         private void HandleSpawnedEnemy(GameObject enemy)
         {
-            if (!activeEnemies.Add(enemy)) 
+            if (!activeEnemies.Add(enemy))
+            {
                 return;
+            }
+
             if(enemy.TryGetComponent(out HitPointsComponent hpComponent))
+            {
                 hpComponent.OnHpEmpty += OnDestroyed;
+            }
         }
 
         private void OnDestroyed(GameObject enemy)
         {
-            if (!activeEnemies.Remove(enemy)) 
+            if (!activeEnemies.Remove(enemy))
+            {
                 return;
+            }
+
             if (enemy.TryGetComponent(out HitPointsComponent hpComponent))
+            {
                 hpComponent.OnHpEmpty -= OnDestroyed;
+            }
+
             enemySpawner.RemoveDestroyedEnemy(enemy);
         }
     }

@@ -23,7 +23,10 @@ namespace ShootEmUp.Timers
         private void Update()
         {
             if (!isTimerCounting)
+            {
                 return;
+            }
+
             if (time > 0)
             {
                 time -= Time.deltaTime;
