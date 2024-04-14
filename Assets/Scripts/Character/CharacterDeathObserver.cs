@@ -1,16 +1,21 @@
+using DI.Attributes;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class CharacterDeathObserver : MonoBehaviour,
+    public sealed class CharacterDeathObserver :
         Listeners.IGameStartListener,
         Listeners.IGameFinishListener
     {
-        [SerializeField] 
-        private GameObject character; 
-        
-        [SerializeField] 
+        private GameObject character;
         private GameManager gameManager;
+
+        [Inject]
+        public void Construct(GameObject character, GameManager gameManager)
+        {
+            this.character = character;
+            this.gameManager = gameManager;
+        }
 
         public void OnGameStarted()
         {

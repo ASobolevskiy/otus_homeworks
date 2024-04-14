@@ -37,7 +37,6 @@ namespace ShootEmUp.Timers
                 time = timeInterval;
                 isTimerCounting = false;
                 OnTimerElapsed?.Invoke();
-                Debug.Log("Time is up!");
             }
         }
 

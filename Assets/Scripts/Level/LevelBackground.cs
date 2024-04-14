@@ -1,9 +1,10 @@
 using System;
+using DI.Attributes;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed partial class LevelBackground : MonoBehaviour,
+    public sealed class LevelBackground : MonoBehaviour,
         Listeners.IFixedUpdateListener
     {
         private float startPositionY;
@@ -13,13 +14,8 @@ namespace ShootEmUp
         private float positionZ;
         private Transform myTransform;
 
-        [SerializeField]
-        private GameManager gameManager;
-        
-        [SerializeField]
-        private Params parameters;
-
-        private void Awake()
+        [Inject]
+        public void Construct(LevelBackgroundParams parameters)
         {
             startPositionY = parameters.startPositionY;
             endPositionY = parameters.endPositionY;
@@ -28,12 +24,6 @@ namespace ShootEmUp
             var position = myTransform.position;
             positionX = position.x;
             positionZ = position.z;
-            gameManager.AddGameListener(this);
-        }
-
-        private void OnDestroy()
-        {
-            gameManager.RemoveGameListener(this);
         }
 
         public void OnFixedUpdate(float fixedDeltaTime)

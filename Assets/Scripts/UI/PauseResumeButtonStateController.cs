@@ -1,10 +1,12 @@
+using System;
 using ShootEmUp;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
 {
-    public class PauseResumeButtonStateController : MonoBehaviour,
+    [Serializable]
+    public class PauseResumeButtonStateController :
         Listeners.IGameStartListener,
         Listeners.IGamePauseListener,
         Listeners.IGameResumeListener,
@@ -15,12 +17,6 @@ namespace UI
 
         [SerializeField]
         private Button resumeButton;
-
-        private void Awake()
-        {
-            pauseButton.gameObject.SetActive(false);
-            resumeButton.gameObject.SetActive(false);
-        }
 
         public void OnGameStarted()
         {

@@ -10,13 +10,14 @@ namespace ShootEmUp
         [SerializeField]
         private EnemyAttackAgent attackAgent;
 
-        private void Awake()
+        public void Activate()
         {
             moveAgent.OnDestinationReached += HandleDestinationReached;
         }
 
-        private void OnDestroy()
+        public void Deactivate()
         {
+            attackAgent.SetReadyForAttack(false);
             moveAgent.OnDestinationReached -= HandleDestinationReached;
         }
 

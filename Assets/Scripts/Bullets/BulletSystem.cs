@@ -1,22 +1,27 @@
 using System;
 using System.Collections.Generic;
+using DI.Attributes;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed partial class BulletSystem : MonoBehaviour,
+    public sealed class BulletSystem :  
         Listeners.IFixedUpdateListener,
         Listeners.IGamePauseListener,
         Listeners.IGameResumeListener
     {
-        [SerializeField] 
-        private LevelBounds levelBounds;
-
-        [SerializeField]
-        private BulletPool bulletPool;
-        
         private readonly HashSet<Bullet> activeBullets = new();
         private readonly List<Bullet> cache = new();
+        
+        private LevelBounds levelBounds;
+        private BulletPool bulletPool;
+
+        [Inject]
+        public void Construct(LevelBounds levelBounds, BulletPool bulletPool)
+        {
+            this.levelBounds = levelBounds;
+            this.bulletPool = bulletPool;
+        }
 
         public void OnGamePaused()
         {
@@ -49,7 +54,7 @@ namespace ShootEmUp
             }
         }
 
-        public void FlyBulletByArgs(Args args)
+        public void FlyBulletByArgs(BulletArgs args)
         {
             var bullet = bulletPool.GetBullet();
             

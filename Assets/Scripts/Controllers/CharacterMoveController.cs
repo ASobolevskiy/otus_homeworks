@@ -1,16 +1,21 @@
+using DI.Attributes;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class CharacterMoveController : MonoBehaviour,
+    public class CharacterMoveController :
         Listeners.IGameStartListener,
         Listeners.IGameFinishListener
     {
-        [SerializeField]
         private InputSystem input;
-
-        [SerializeField]
         private GameObject character;
+
+        [Inject]
+        public void Construct(InputSystem inputSystem, GameObject character)
+        {
+            input = inputSystem;
+            this.character = character;
+        }
 
         public void OnGameStarted()
         {

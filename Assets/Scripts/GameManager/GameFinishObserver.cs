@@ -1,30 +1,27 @@
+using DI.Attributes;
 using SceneLoaders;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class GameFinishObserver : MonoBehaviour
+    public class GameFinishObserver
     {
-        [SerializeField]
         private GameManager gameManager;
-
-        [SerializeField]
         private SceneLoader sceneLoader;
 
         private const int LOADING_SCENE_INDEX = 0;
 
-        private void Awake()
+        [Inject]
+        private void Construct(GameManager gameManager, SceneLoader sceneLoader)
         {
+            this.gameManager = gameManager;
+            this.sceneLoader = sceneLoader;
             gameManager.GameFinished += HandleFinishedGame;
         }
-
-        private void OnDestroy()
-        {
-            gameManager.GameFinished -= HandleFinishedGame;
-        }
-
+        
         private void HandleFinishedGame()
         {
+            gameManager.GameFinished -= HandleFinishedGame;
             sceneLoader.LoadScene(LOADING_SCENE_INDEX);
         }
     }

@@ -1,22 +1,29 @@
+using System;
+using DI.Attributes;
 using ShootEmUp;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
 {
-    public class PauseResumeButtonHandler : MonoBehaviour,
+    [Serializable]
+    public class PauseResumeButtonHandler :
         Listeners.IGameStartListener,
         Listeners.IGameFinishListener
     {
-        [SerializeField]
-        private GameManager gameManager;
-
         [SerializeField]
         private Button pauseButton;
 
         [SerializeField]
         private Button resumeButton;
         
+        private GameManager gameManager;
+
+        [Inject]
+        public void Construct(GameManager gameManager)
+        {
+            this.gameManager = gameManager;
+        }
         public void OnGameStarted()
         {
             pauseButton.onClick.AddListener(PauseGame);

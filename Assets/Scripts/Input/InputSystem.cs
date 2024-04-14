@@ -3,8 +3,7 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class InputSystem : MonoBehaviour,
-        Listeners.IUpdateListener
+    public sealed class InputSystem : Listeners.IUpdateListener
     {
         public event Action OnFire;
         public event Action<Vector2> OnMove;

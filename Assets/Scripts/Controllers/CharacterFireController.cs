@@ -1,22 +1,25 @@
+using DI.Attributes;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class CharacterFireController : MonoBehaviour,
+    public class CharacterFireController :
         Listeners.IGameStartListener,
         Listeners.IGameFinishListener
     {
-        [SerializeField]
-        private InputSystem input;
-        
-        [SerializeField]
         private BulletSystem bulletSystem;
-
-        [SerializeField]
         private BulletConfig bulletConfig;
-
-        [SerializeField]
         private GameObject character;
+        private InputSystem input;
+
+        [Inject]
+        public void Construct(InputSystem inputSystem, GameObject character, BulletConfig bulletConfig, BulletSystem bulletSystem)
+        {
+            input = inputSystem;
+            this.character = character;
+            this.bulletConfig = bulletConfig;
+            this.bulletSystem = bulletSystem;
+        }
 
         public void OnGameStarted()
         {
@@ -32,7 +35,7 @@ namespace ShootEmUp
         {
             if (character.TryGetComponent(out WeaponComponent weapon))
             {
-                bulletSystem.FlyBulletByArgs(new BulletSystem.Args
+                bulletSystem.FlyBulletByArgs(new BulletArgs
                 {
                     isPlayer = true,
                     physicsLayer = (int)bulletConfig.physicsLayer,

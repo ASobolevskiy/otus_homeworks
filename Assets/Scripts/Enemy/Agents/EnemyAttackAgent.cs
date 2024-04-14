@@ -13,7 +13,6 @@ namespace ShootEmUp
         [SerializeField]
         private float countdown;
 
-        //TODO Fix with DI
         private BulletSystem bulletSystem;
         
         private GameObject target;
@@ -68,7 +67,7 @@ namespace ShootEmUp
             var startPosition = weaponComponent.Position;
             var vector = (Vector2)target.transform.position - startPosition;
             var direction = vector.normalized;
-            bulletSystem.FlyBulletByArgs(new BulletSystem.Args
+            bulletSystem.FlyBulletByArgs(new BulletArgs
             {
                 isPlayer = false,
                 physicsLayer = (int)PhysicsLayer.EnemyBullet,

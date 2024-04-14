@@ -1,32 +1,31 @@
 using System;
+using DI.Attributes;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class EnemySpawner : MonoBehaviour
+    public class EnemySpawner
     {
         public event Action<GameObject> OnEnemySpawned;
-
-        [SerializeField]
-        private GameManager gameManager;
         
-        [SerializeField]
         private EnemyPositions enemyPositions;
-
-        [SerializeField]
-        private EnemyPool enemyPool;
-        
-
-        [SerializeField]
         private Transform worldTransform;
-
-        [SerializeField]
+        private GameManager gameManager;
         private GameObject character;
-
-        [SerializeField]
         private BulletSystem bulletSystem;
-
+        private EnemyPool enemyPool;
         private GameObject currentEnemy;
+
+        [Inject]
+        public void Construct(EnemyPool enemyPool, BulletSystem bulletSystem, GameObject character, GameManager gameManager, Transform worldTransform, EnemyPositions enemyPositions)
+        {
+            this.enemyPool = enemyPool;
+            this.bulletSystem = bulletSystem;
+            this.character = character;
+            this.gameManager = gameManager;
+            this.worldTransform = worldTransform;
+            this.enemyPositions = enemyPositions;
+        }
 
         public void SpawnEnemy()
         {
@@ -36,42 +35,11 @@ namespace ShootEmUp
                 RestoreHpIfNeeded();
                 SetSpawnPosition();
                 SetAttackPosition();
-                if (currentEnemy.TryGetComponent(out EnemyAttackAgent enemyAttackAgent))
-                {
-                    enemyAttackAgent.SetTarget(character);
-                    enemyAttackAgent.SetBulletSystem(bulletSystem);
-                    gameManager.AddGameListener(enemyAttackAgent);
-                }
-                if(currentEnemy.TryGetComponent(out EnemyMoveAgent enemyMoveAgent))
-                {
-                    gameManager.AddGameListener(enemyMoveAgent);
-                }
-                if(currentEnemy.TryGetComponent(out MoveComponentBase moveComponent))
-                {
-                    gameManager.AddGameListener(moveComponent);
-                }
+                RegisterListeners();
                 OnEnemySpawned?.Invoke(currentEnemy);
             }
         }
         
-        public void RemoveDestroyedEnemy(GameObject enemy)
-        {
-            if (enemy.TryGetComponent(out EnemyAttackAgent attackAgent))
-            {
-                attackAgent.SetReadyForAttack(false);
-                gameManager.RemoveGameListener(attackAgent);
-            }
-            if (enemy.TryGetComponent(out EnemyMoveAgent enemyMoveAgent))
-            {
-                gameManager.RemoveGameListener(enemyMoveAgent);
-            }
-            if (enemy.TryGetComponent(out MoveComponentBase moveComponent))
-            {
-                gameManager.RemoveGameListener(moveComponent);
-            }
-            enemyPool.EnqueueEnemy(enemy);
-        }
-
         private void RestoreHpIfNeeded()
         {
             if (!currentEnemy.TryGetComponent(out HitPointsComponent hpComponent))
@@ -99,6 +67,44 @@ namespace ShootEmUp
                 moveAgent.SetDestination(attackPosition.position);
             }
             
+        }
+
+        private void RegisterListeners()
+        {
+            if (currentEnemy.TryGetComponent(out EnemyAttackAgent enemyAttackAgent))
+            {
+                gameManager.AddGameListener(enemyAttackAgent);
+            }
+            if(currentEnemy.TryGetComponent(out EnemyMoveAgent enemyMoveAgent))
+            {
+                gameManager.AddGameListener(enemyMoveAgent);
+            }
+            if(currentEnemy.TryGetComponent(out MoveComponentBase moveComponent))
+            {
+                gameManager.AddGameListener(moveComponent);
+            }
+        }
+
+        public void RemoveDestroyedEnemy(GameObject enemy)
+        {
+            UnregisterListeners(enemy);
+            enemyPool.EnqueueEnemy(enemy);
+        }
+
+        private void UnregisterListeners(GameObject enemy)
+        {
+            if (enemy.TryGetComponent(out EnemyAttackAgent attackAgent))
+            {
+                gameManager.RemoveGameListener(attackAgent);
+            }
+            if (enemy.TryGetComponent(out EnemyMoveAgent enemyMoveAgent))
+            {
+                gameManager.RemoveGameListener(enemyMoveAgent);
+            }
+            if (enemy.TryGetComponent(out MoveComponentBase moveComponent))
+            {
+                gameManager.RemoveGameListener(moveComponent);
+            }
         }
     }
 }
