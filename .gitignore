@@ -73,3 +73,5 @@ crashlytics-build.properties
 .vsconfig
 __MACOSX/
 *.DS_Store
+.idea/.idea.Otus_Homeworks/.idea/projectSettingsUpdater.xml
+.idea/.idea.Otus_Homeworks/.idea/workspace.xml
