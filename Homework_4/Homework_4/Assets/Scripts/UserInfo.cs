@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Lessons.Architecture.PM
+namespace Homework
 {
     public sealed class UserInfo
     {
@@ -14,6 +14,13 @@ namespace Lessons.Architecture.PM
         public string Description { get; private set; }
 
         public Sprite Icon { get; private set; }
+
+        public UserInfo(UserInfoObject infoObject)
+        {
+            Name = infoObject.Name;
+            Description = infoObject.Description;
+            Icon = infoObject.Icon;
+        }
 
         public void ChangeName(string name)
         {

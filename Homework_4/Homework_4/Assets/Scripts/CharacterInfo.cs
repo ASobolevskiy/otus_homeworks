@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Lessons.Architecture.PM
+namespace Homework
 {
     public sealed class CharacterInfo
     {

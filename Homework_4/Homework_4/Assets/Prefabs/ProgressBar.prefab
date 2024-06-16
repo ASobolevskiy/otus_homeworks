@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4439984223490389899}
+  - component: {fileID: -6795686036593003854}
   - component: {fileID: 5824100460823220086}
   m_Layer: 5
   m_Name: ProgressBar
@@ -40,6 +41,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 18.783386}
   m_SizeDelta: {x: -80, y: 55.56671}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &-6795686036593003854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2336278276242932677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a914ceb50ad847e89b9c4e46ab64c91c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  experienceText: {fileID: 6755236383413264868}
+  slider: {fileID: 5824100460823220086}
+  uncompletedProgessSprite: {fileID: 21300000, guid: d27fae081d0ac2a4486698cec3b91b9f, type: 3}
+  completedProgressSprite: {fileID: 21300000, guid: ebca5e0b7178447bea6a7fe825585b0a, type: 3}
 --- !u!114 &5824100460823220086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,7 +104,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

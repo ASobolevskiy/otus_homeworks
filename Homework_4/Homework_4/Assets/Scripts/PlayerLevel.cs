@@ -1,22 +1,24 @@
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
-namespace Lessons.Architecture.PM
+namespace Homework
 {
+    [Serializable]
     public sealed class PlayerLevel
     {
         public event Action OnLevelUp;
         public event Action<int> OnExperienceChanged;
+        
+        [field: SerializeField]
         public int CurrentLevel { get; private set; } = 1;
 
-        
+        [field: SerializeField]
         public int CurrentExperience { get; private set; }
         
-        public int RequiredExperience
-        {
-            get { return 100 * (this.CurrentLevel + 1); }
-        }
+        public int RequiredExperience => 100 * (CurrentLevel + 1);
 
-        
+
         public void AddExperience(int range)
         {
             var xp = Math.Min(this.CurrentExperience + range, this.RequiredExperience);
