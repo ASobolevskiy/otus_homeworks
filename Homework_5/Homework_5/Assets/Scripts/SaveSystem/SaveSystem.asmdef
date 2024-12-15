@@ -1,3 +1,4 @@
 {
-  "name": "SaveSystem"
+  "name": "SaveSystem",
+  "references":[ "GUID:e92cb6376d0d4e28b484855ee7c3a9b5", "GUID:3b1187b7ccaf4f5caa6ba0e031d5dd00"]
 }
