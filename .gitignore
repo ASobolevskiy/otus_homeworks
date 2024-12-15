@@ -75,3 +75,9 @@ __MACOSX/
 *.DS_Store
 .idea/.idea.Otus_Homeworks/.idea/projectSettingsUpdater.xml
 .idea/.idea.Otus_Homeworks/.idea/workspace.xml
+*/*/Library/
+*/*/obj/
+*/*/Logs/
+*/*/.idea/
+*/*/UserSettings/
+*/*/Temp/
