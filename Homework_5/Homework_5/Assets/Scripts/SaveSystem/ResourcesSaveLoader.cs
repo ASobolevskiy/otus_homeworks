@@ -72,11 +72,12 @@ namespace SaveSystem
             }
 
             var buffer = new byte[file.Length];
-            while (file.Read(buffer, 0, buffer.Length) == 1)
+            while (file.Read(buffer, 0, buffer.Length) != 0)
             {
-                
+                Debug.Log($"Reading save data");
             }
-
+            file.Flush();
+            file.Dispose();
             var jsonString = Encoding.UTF8.GetString(buffer);
             var list = JsonConvert.DeserializeObject<List<ResourceData>>(jsonString);
             var resources = _resourceService.GetResources();
