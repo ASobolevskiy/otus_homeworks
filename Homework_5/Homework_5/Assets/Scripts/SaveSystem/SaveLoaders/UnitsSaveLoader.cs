@@ -1,26 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
-using DI;
 using GameEngine;
-using Sirenix.OdinInspector.Editor.Drawers;
 using UnityEngine;
 
 namespace SaveSystem
 {
-    public class UnitsSaveLoader : ISaveLoader
+    public class UnitsSaveLoader : SaveLoader<UnitSaveData, UnitManager>
     {
-        private UnitManager _unitManager;
-
-        [Inject]
-        public void Construct(UnitManager unitManager)
-        {
-            _unitManager = unitManager;
-        }
-        
-        void ISaveLoader.SaveData(IGameRepository gameRepository)
+        protected override UnitSaveData ConvertToSaveData(UnitManager service)
         {
             List<UnitData> dataToSave = new();
-            var unitData = _unitManager.GetAllUnits();
+            var unitData = service.GetAllUnits();
             foreach (var record in unitData)
             {
                 var id = record.GetInstanceID();
@@ -34,24 +24,17 @@ namespace SaveSystem
                     Rotation = new RotationData(rot.x, rot.y, rot.z)
                 });
             }
-
-            var unitSaveData = new UnitSaveData()
+            
+            return new UnitSaveData()
             {
                 UnitDataList = dataToSave
             };
-            
-            gameRepository.SetData(unitSaveData);
         }
 
-        void ISaveLoader.LoadData(IGameRepository gameRepository)
+        protected override void SetupData(UnitManager service, UnitSaveData data)
         {
-            if (!gameRepository.TryGetData(out UnitSaveData data))
-            {
-                return;
-            }
-
             var unitData = data.UnitDataList;
-            var currentUnits = _unitManager.GetAllUnits();
+            var currentUnits = service.GetAllUnits();
             List<Unit> newUnits = new();
             foreach (var record in unitData)
             {
@@ -67,10 +50,10 @@ namespace SaveSystem
                     newUnits.Add(unit);
                 }
             }
-
+            
             if (newUnits.Count != 0)
             {
-                _unitManager.SetupUnits(newUnits);
+                service.SetupUnits(newUnits);
             }
         }
     }

@@ -1,25 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
-using DI;
 using GameEngine;
 using UnityEngine;
 
 namespace SaveSystem
 {
-    public class ResourcesSaveLoader : ISaveLoader
+    public class ResourcesSaveLoader : SaveLoader<ResourceSaveData, ResourceService>
     {
-        private ResourceService _resourceService;
-
-        [Inject]
-        public void Construct(ResourceService resourceService)
-        {
-            _resourceService = resourceService;
-        }
-        
-        void ISaveLoader.SaveData(IGameRepository gameRepository)
+        protected override ResourceSaveData ConvertToSaveData(ResourceService service)
         {
             List<ResourceData> dataToSave = new();
-            var resourceData = _resourceService.GetResources();
+            var resourceData = service.GetResources();
             foreach (var record in resourceData)
             {
                 var transform = record.transform;
@@ -33,23 +24,17 @@ namespace SaveSystem
                     Rotation = new RotationData(rot.x, rot.y, rot.z)
                 });
             }
-
-            var resourceSaveData = new ResourceSaveData()
+            
+            return new ResourceSaveData()
             {
                 ResourcesDataList = dataToSave
             };
-            gameRepository.SetData(resourceSaveData);
         }
 
-        void ISaveLoader.LoadData(IGameRepository gameRepository)
+        protected override void SetupData(ResourceService service, ResourceSaveData data)
         {
-            if (!gameRepository.TryGetData(out ResourceSaveData data))
-            {
-                return;
-            }
-
             var resourceData = data.ResourcesDataList;
-            var currentResources = _resourceService.GetResources();
+            var currentResources = service.GetResources();
             List<Resource> newResources = new();
             foreach (var record in resourceData)
             {
@@ -65,7 +50,7 @@ namespace SaveSystem
                     newResources.Add(res);
                 }
             }
-            _resourceService.SetResources(newResources);
+            service.SetResources(newResources);
         }
     }
 }

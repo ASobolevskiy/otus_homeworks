@@ -8,10 +8,12 @@ namespace SaveSystem
     {
         private ISaveLoader[] _saveLoaders;
         private GameRepository _gameRepository;
+        private ServiceLocator serviceLocator;
         
         [Inject]
         public void Construct(GameRepository gameRepository, ISaveLoader[] saveLoaders)
         {
+            serviceLocator = FindObjectOfType<ServiceLocator>();
             _gameRepository = gameRepository;
             _saveLoaders = saveLoaders;
         }
@@ -21,7 +23,7 @@ namespace SaveSystem
         {
             foreach (var saveLoader in _saveLoaders)
             {
-                saveLoader.SaveData(_gameRepository);
+                saveLoader.SaveData(serviceLocator, _gameRepository);
             }
             
             _gameRepository.SaveState();
@@ -34,7 +36,7 @@ namespace SaveSystem
             
             foreach (var saveLoader in _saveLoaders)
             {
-                saveLoader.LoadData(_gameRepository);
+                saveLoader.LoadData(serviceLocator, _gameRepository);
             }
         }
     }
