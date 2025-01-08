@@ -1,4 +1,3 @@
-using System;
 using DI;
 using GameEngine;
 using UnityEngine;
@@ -39,8 +38,6 @@ public sealed class SceneContext : MonoBehaviour
             GameObject target = rootGameObjects[i];
             StartInjection(target.transform);
         }
-        
-        
         
         serviceLocator.GetService<UnitManager>().SetupUnits(FindObjectsOfType<Unit>());
         serviceLocator.GetService<ResourceService>().SetResources(FindObjectsOfType<Resource>());

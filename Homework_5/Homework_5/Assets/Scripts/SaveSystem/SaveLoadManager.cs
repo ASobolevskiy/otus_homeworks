@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using DI;
-using GameEngine;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -9,10 +7,12 @@ namespace SaveSystem
     public class SaveLoadManager : MonoBehaviour
     {
         private ISaveLoader[] _saveLoaders;
+        private GameRepository _gameRepository;
         
         [Inject]
-        public void Construct(ISaveLoader[] saveLoaders)
+        public void Construct(GameRepository gameRepository, ISaveLoader[] saveLoaders)
         {
+            _gameRepository = gameRepository;
             _saveLoaders = saveLoaders;
         }
 
@@ -21,16 +21,20 @@ namespace SaveSystem
         {
             foreach (var saveLoader in _saveLoaders)
             {
-                saveLoader.SaveData();
+                saveLoader.SaveData(_gameRepository);
             }
+            
+            _gameRepository.SaveState();
         }
 
         [Button]
         public void LoadGame()
         {
+            _gameRepository.LoadState();
+            
             foreach (var saveLoader in _saveLoaders)
             {
-                saveLoader.LoadData();
+                saveLoader.LoadData(_gameRepository);
             }
         }
     }
